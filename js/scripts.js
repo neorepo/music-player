@@ -24,7 +24,10 @@ const songs = [
     { id: 9, artist: "Pedro Arroyo", title: "Todo me huele a ti", src: "audio/salsa/Pedro Arroyo - Todo me huele a ti.mp3", duration: "5:22" },
     { id: 10, artist: "The New York Band", title: "Nadie como tu", src: "audio/salsa/The New York Band - Nadie como tu.m4a", duration: "4:47" },
     { id: 11, artist: "Willie Gonzalez", title: "Hazme olvidarla", src: "audio/salsa/Willie Gonzalez - Hazme olvidarla.mp3", duration: "5:36" },
-    { id: 12, artist: "Johnny Rojas", title: "Adicto a ti", src: "audio/salsa/Johnny Rojas - Adicto a ti.m4a", duration: "5:32" }
+    { id: 12, artist: "Johnny Rojas", title: "Adicto a ti", src: "audio/salsa/Johnny Rojas - Adicto a ti.m4a", duration: "5:32" },
+    { id: 13, artist: "Lalo Rodriguez", title: "Ven devorame otra vez", src: "audio/salsa/Lalo Rodriguez - Ven devorame otra vez.m4a", duration: "5:07" },
+    { id: 14, artist: "Frankie Ruiz", title: "Tu con el", src: "audio/salsa/Frankie Ruiz - Tu con el.m4a", duration: "5:03" },
+    { id: 15, artist: "David Pabon", title: "Aquel viejo motel", src: "audio/salsa/David Pabon - Aquel viejo motel.m4a", duration: "5:08" },
 ];
 
 // Ordenamos el listado de canciones por artista
