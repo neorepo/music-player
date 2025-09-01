@@ -1,17 +1,5 @@
 "use strict";
 
-// const songs = [
-//     { id: 1, artist: "Arena Hash", title: "Como te va mi amor", src: "audio/Arena Hash - Como te va mi amor.m4a", duration: "5:29" },
-//     { id: 2, artist: "Hombres G", title: "Si no te tengo a ti", src: "audio/Hombres G - Si no te tengo a ti.m4a", duration: "4:46" },
-//     { id: 3, artist: "Virus", title: "Polvos de una relacion", src: "audio/Virus - Polvos de una relacion.m4a", duration: "3:39" },
-//     { id: 4, artist: "Pedro Suarez Vertiz", title: "Te siento de solo pensar", src: "audio/Pedro Suarez Vertiz - Te siento de solo pensar.m4a", duration: "3:22" },
-//     { id: 5, artist: "Virus", title: "Sin disfraz", src: "audio/Virus - Sin disfraz.m4a", duration: "5:30" },
-//     { id: 6, artist: "Charly Garcia", title: "Influencia", src: "audio/Charly Garcia - Influencia.m4a", duration: "5:30" },
-//     { id: 7, artist: "Danza Invisible", title: "Sin aliento", src: "audio/Danza Invisible - Sin aliento.m4a", duration: "4:57" },
-//     { id: 8, artist: "Eddie Santiago", title: "Antidoto y veneno", src: "audio/Eddie Santiago - Antidoto y veneno.m4a", duration: "5:18" },
-//     { id: 9, artist: "La Misma Gente", title: "Llego el final", src: "audio/La Misma Gente - Llego el final.m4a", duration: "5:43" }
-// ];
-
 const songs = [
     { id: 1, artist: "Eddie Santiago", title: "Antidoto y veneno", src: "audio/salsa/Eddie Santiago - Antidoto y veneno.m4a", duration: "5:18" },
     { id: 2, artist: "La inmensidad", title: "Ay que amor", src: "audio/salsa/La inmensidad - Ay que amor.mp3", duration: "3:54" },
@@ -192,7 +180,7 @@ const displaySongList = () => {
         tr.addEventListener('dblclick', (event) => {
             const previous = dataTable.querySelector(`tr.playing`);
             if (previous) previous.classList.remove("playing");
-            tr.classList.add("playing");
+            addCssClass(tr, "playing");
             currentSongIndex = i;
             embedAudio(song.src);
             playAudio();
@@ -224,7 +212,7 @@ previousBtn.addEventListener("click", () => {
 
     // currentSongIndex se decremento previamente
     const previous = dataTable.children[currentSongIndex];
-    if (previous) previous.classList.add("playing");
+    if (previous) addCssClass(previous, "playing");
 
 });
 
@@ -250,7 +238,7 @@ nextBtn.addEventListener("click", () => {
     // currentSongIndex se incremento previamente
     const current = dataTable.children[currentSongIndex];
     // console.log(current);
-    if (current) current.classList.add("playing");
+    if (current) addCssClass(current, "playing");
 
 });
 
@@ -307,7 +295,7 @@ audio.addEventListener('ended', function () {
     // currentSongIndex se incremento previamente
     const current = dataTable.children[currentSongIndex];
     // console.log(current);
-    if (current) current.classList.add("playing");
+    if (current) addCssClass(current, "playing");
 });
 
 // Functions
@@ -339,4 +327,9 @@ const shuffle = arr => {
         const r = i + Math.floor(Math.random() * (len - i));
         [arr[i], arr[r]] = [arr[r], arr[i]];
     }
+}
+
+const addCssClass = (element, cssClass) => {
+    element.classList.add(cssClass);
+    element.scrollIntoView({ behavior: "smooth", block: "center" });
 }
