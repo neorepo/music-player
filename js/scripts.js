@@ -36,6 +36,7 @@ const d = document;
 
 const audio = d.querySelector("#audio");
 
+// Song list
 const dataTable = document.querySelector("#data-table");
 
 // Volume control
@@ -56,9 +57,6 @@ const progressBar = d.querySelector("#progress-bar");
 // Variable para guardar el estado de reproducción del audio
 let wasPlaying = false;
 // End progress bar
-
-// Song list
-const songList = d.querySelector("#song-list");
 
 // Song title
 const songTitle = d.querySelector("#song-title");
