@@ -331,5 +331,8 @@ const shuffle = arr => {
 
 const addCssClass = (element, cssClass) => {
     element.classList.add(cssClass);
-    element.scrollIntoView({ behavior: "smooth", block: "center" });
+    // element.scrollIntoView({ behavior: "smooth", block: "center" });
+    const container = element.parentElement.parentElement
+    // container.scrollTop = element.offsetTop;
+    container.scrollTop = element.offsetTop - (container.clientHeight / 2) + (element.offsetHeight / 2);
 }
