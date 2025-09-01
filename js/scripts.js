@@ -131,20 +131,26 @@ audio.addEventListener("timeupdate", () => {
 // Progress bar
 // Ajustar el tiempo de reproducción al mover la barra de progreso
 progressBar.addEventListener("input", () => {
-    audio.pause();
+    // audio.pause();
     audio.currentTime = progressBar.value;  // Actualizar el tiempo del audio
+    console.log("se movio la barra dentro del input!");
 });
 
 // Antes de mover el control, guardamos el estado de reproducción del audio
 progressBar.addEventListener("mousedown", () => {
-    wasPlaying = !audio.paused;  // Guarda si el audio está reproduciéndose
+    // wasPlaying = !audio.paused;  // Guarda si el audio está reproduciéndose
+    // if (wasPlaying) {  // Solo hace play si el audio estaba en reproducción
+    //     audio.play();  // Reproduce el audio después de que se haya dejado de mover
+    // }
+    // console.log("se movio la barra dentro del mousedown!");
 });
 
 // Reanudar el audio cuando el control deje de moverse
 progressBar.addEventListener("change", () => {
-    if (wasPlaying) {  // Solo hace play si el audio estaba en reproducción
-        audio.play();  // Reproduce el audio después de que se haya dejado de mover
-    }
+    // if (wasPlaying) {  // Solo hace play si el audio estaba en reproducción
+    //     audio.play();  // Reproduce el audio después de que se haya dejado de mover
+    // }
+    // console.log("se movio la barra dentro del change!");
 });
 // End progress bar
 
