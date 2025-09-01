@@ -133,7 +133,6 @@ audio.addEventListener("timeupdate", () => {
 progressBar.addEventListener("input", () => {
     // audio.pause();
     audio.currentTime = progressBar.value;  // Actualizar el tiempo del audio
-    console.log("se movio la barra dentro del input!");
 });
 
 // Antes de mover el control, guardamos el estado de reproducción del audio
@@ -142,7 +141,6 @@ progressBar.addEventListener("mousedown", () => {
     // if (wasPlaying) {  // Solo hace play si el audio estaba en reproducción
     //     audio.play();  // Reproduce el audio después de que se haya dejado de mover
     // }
-    // console.log("se movio la barra dentro del mousedown!");
 });
 
 // Reanudar el audio cuando el control deje de moverse
@@ -157,8 +155,7 @@ progressBar.addEventListener("change", () => {
 let currentSongIndex = 0;
 
 document.addEventListener("DOMContentLoaded", () => {
-    // displaySongList();
-    displayRows();
+    displaySongList();
     const song = songs[currentSongIndex];
     embedAudio(song.src);
     setSongInfo(`🎵 ${song.artist} - ${song.title} 🎵`);
@@ -166,33 +163,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Song list
 const displaySongList = () => {
-    const $fragment = d.createDocumentFragment();
-    for (let i = 0; i < totalSongs; i++) {
-        const song = songs[i];
-        const li = d.createElement("li");
-        li.textContent = `${i + 1}. ${song.artist} - ${song.title} ${song.duration}`;
-
-        if (i === currentSongIndex) li.classList.add("playing");
-
-        li.addEventListener('dblclick', (event) => {
-
-            const previous = songList.querySelector(`li.playing`);
-            if (previous) previous.classList.remove("playing");
-
-            li.classList.add("playing");
-
-            currentSongIndex = i;
-            embedAudio(song.src);
-            playAudio();
-            setSongInfo(`🎵 ${song.artist} - ${song.title} 🎵`);
-        });
-        $fragment.appendChild(li);
-    }
-    songList.appendChild($fragment);
-}
-
-// Song list
-const displayRows = () => {
     const $fragment = d.createDocumentFragment();
     for (let i = 0; i < totalSongs; i++) {
         const song = songs[i];
@@ -248,13 +218,6 @@ previousBtn.addEventListener("click", () => {
         currentSongIndex = 0;
     }
 
-    // const current = songList.querySelector(`li.playing`);
-    // if (current) current.classList.remove("playing");
-
-    // // currentSongIndex se decremento previamente
-    // const previous = songList.children[currentSongIndex];
-    // if (previous) previous.classList.add("playing");
-
     const current = dataTable.querySelector(`tr.playing`);
     if (current) current.classList.remove("playing");
 
@@ -279,14 +242,6 @@ nextBtn.addEventListener("click", () => {
     } else {
         currentSongIndex = totalSongs - 1;
     }
-
-    // const previous = songList.querySelector(`li.playing`);
-    // if (previous) previous.classList.remove("playing");
-
-    // // currentSongIndex se incremento previamente
-    // const current = songList.children[currentSongIndex];
-    // // console.log(current);
-    // if (current) current.classList.add("playing");
 
     const previous = dataTable.querySelector(`tr.playing`);
     if (previous) previous.classList.remove("playing");
@@ -343,20 +298,7 @@ audio.addEventListener('ended', function () {
         setSongInfo(`🎵 ${song.artist} - ${song.title} 🎵`);
     } else {
         currentSongIndex = totalSongs - 1;
-        // audio.removeAttribute("src");
-        // setSongInfo(`Nada esta sonando`);
-        // progressBar.value = 0;
-        // progressBar.disabled = true;
-        // durationDisplay.textContent = currentTimeDisplay.textContent = "0:00";
     }
-    // console.log(currentSongIndex);
-    // const previous = songList.querySelector(`li.playing`);
-    // if (previous) previous.classList.remove("playing");
-
-    // // currentSongIndex se incremento previamente
-    // const current = songList.children[currentSongIndex];
-    // // console.log(current);
-    // if (current) current.classList.add("playing");
 
     const previous = dataTable.querySelector(`tr.playing`);
     if (previous) previous.classList.remove("playing");
