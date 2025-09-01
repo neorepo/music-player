@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Music Player">
+    <meta name="keywords"
+        content="Audio Player, Music Player, Reproductor de música, Reproductor de audio, HTML, CSS, JavaScript">
+    <meta name="author" content="Julio Cesar">
+    <title>Music Player</title>
+
+    <link rel="stylesheet" href="css/styles.css">
+
+    <link rel="shortcut icon" href="images/headphone.PNG" type="image/png" sizes="16x16 32x32">
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <audio id="audio"></audio>
+
+        <div style="text-align: center;">
+            <h1 style="font-weight: 400;">My Music Player</h1>
+            <p>Melodía, ritmo y armonía, combinados.<br>Pone play ▶️ a tu mundo.</p>
+        </div>
+
+        <div style="overflow: hidden;position: relative;text-align: center;">
+            <p id="song-title" style="white-space: nowrap;">Nada esta sonando</p>
+        </div>
+
+        <div style="display: flex;align-items: center;gap: 4px;">
+            <span id="current-time">0:00</span>
+            <input type="range" name="progress-bar" id="progress-bar" min="0" max="100" value="0" step="0.1"
+                style="width: 100%;">
+            <span id="duration">0:00</span>
+        </div>
+
+        <div style="display: flex;align-items: center;">
+            <span id="volume-btn" style="cursor: pointer;width: 10%;">🔊</span>
+            <input type="range" name="volume-control" id="volume-control" min="0" max="100" value="100" step="1"
+                style="width: 80%;">
+            <span id="volume-display" style="width: 10%;text-align: right;">100</span>
+            <!-- <table style="width: 100%;table-layout: fixed;">
+                <tr>
+                    <td style="width: 8%;">
+                    </td>
+                    <td style="width: 82%;">
+                    </td>
+                    <td style="width: 10%;text-align: right;">
+                    </td>
+                </tr>
+            </table> -->
+        </div>
+
+        <div style="display: flex;justify-content: center;gap: 4px;align-items: center;">
+            <!-- <span id="shuffle-btn" class="emoji">🔀</span> -->
+            <span id="previous-btn" class="emoji" title="Previous track">⏮️</span>
+            <span id="play-pause-btn" class="emoji" title="Play/Pause">▶️</span> <!--https://www.rae.es/dpd/barra-->
+            <span id="next-btn" class="emoji" title="Next track">⏭️</span>
+            <span id="loop-btn" class="emoji" title="Repeat track">🔁</span>
+        </div>
+
+        <div style="border: 1px solid #dee2e6;border-radius: .25rem;margin-top: 1rem;">
+            <!-- <ol id="song-list"></ol> -->
+            <table id="data-table"></table>
+        </div>
+
+        <div style="text-align: center;margin-top: 2rem;">
+            <p>Copyright ©️ 2025 | Made with ❤️ by Julio</p>
+        </div>
+
+    </div>
+
+    <script src="js/scripts.js"></script>
+</body>
+
+</html>
