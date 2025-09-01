@@ -1,0 +1,393 @@
+"use strict";
+
+// const songs = [
+//     { id: 1, artist: "Arena Hash", title: "Como te va mi amor", src: "audio/Arena Hash - Como te va mi amor.m4a", duration: "5:29" },
+//     { id: 2, artist: "Hombres G", title: "Si no te tengo a ti", src: "audio/Hombres G - Si no te tengo a ti.m4a", duration: "4:46" },
+//     { id: 3, artist: "Virus", title: "Polvos de una relacion", src: "audio/Virus - Polvos de una relacion.m4a", duration: "3:39" },
+//     { id: 4, artist: "Pedro Suarez Vertiz", title: "Te siento de solo pensar", src: "audio/Pedro Suarez Vertiz - Te siento de solo pensar.m4a", duration: "3:22" },
+//     { id: 5, artist: "Virus", title: "Sin disfraz", src: "audio/Virus - Sin disfraz.m4a", duration: "5:30" },
+//     { id: 6, artist: "Charly Garcia", title: "Influencia", src: "audio/Charly Garcia - Influencia.m4a", duration: "5:30" },
+//     { id: 7, artist: "Danza Invisible", title: "Sin aliento", src: "audio/Danza Invisible - Sin aliento.m4a", duration: "4:57" },
+//     { id: 8, artist: "Eddie Santiago", title: "Antidoto y veneno", src: "audio/Eddie Santiago - Antidoto y veneno.m4a", duration: "5:18" },
+//     { id: 9, artist: "La Misma Gente", title: "Llego el final", src: "audio/La Misma Gente - Llego el final.m4a", duration: "5:43" }
+// ];
+
+const songs = [
+    { id: 1, artist: "Eddie Santiago", title: "Antidoto y veneno", src: "audio/salsa/Eddie Santiago - Antidoto y veneno.m4a", duration: "5:18" },
+    { id: 2, artist: "La inmensidad", title: "Ay que amor", src: "audio/salsa/La inmensidad - Ay que amor.mp3", duration: "3:54" },
+    { id: 3, artist: "La Misma Gente", title: "Llego el final", src: "audio/salsa/La Misma Gente - Llego el final.m4a", duration: "5:43" },
+    { id: 4, artist: "Los Hermanos Moreno", title: "Por alguien como tu", src: "audio/salsa/Los Hermanos Moreno - Por alguien como tu.m4a", duration: "3:38" },
+    { id: 5, artist: "Nino Segarra", title: "Como amigos si, como amantes no", src: "audio/salsa/Nino Segarra - Como amigos si, como amantes no.mp3", duration: "4:46" },
+    { id: 6, artist: "Nino Segarra", title: "Entre la espada y la pared", src: "audio/salsa/Nino Segarra - Entre la espada y la pared.mp3", duration: "5:44" },
+    { id: 7, artist: "Nino Segarra", title: "Porque te amo", src: "audio/salsa/Nino Segarra - Porque te amo.m4a", duration: "5:06" },
+    { id: 8, artist: "Paquito Guzman", title: "Que voy a hacer sin ti", src: "audio/salsa/Paquito Guzman - Que voy a hacer sin ti.m4a", duration: "5:32" },
+    { id: 9, artist: "Pedro Arroyo", title: "Todo me huele a ti", src: "audio/salsa/Pedro Arroyo - Todo me huele a ti.mp3", duration: "5:22" },
+    { id: 10, artist: "The New York Band", title: "Nadie como tu", src: "audio/salsa/The New York Band - Nadie como tu.m4a", duration: "4:47" },
+    { id: 11, artist: "Willie Gonzalez", title: "Hazme olvidarla", src: "audio/salsa/Willie Gonzalez - Hazme olvidarla.mp3", duration: "5:36" },
+    { id: 12, artist: "Johnny Rojas", title: "Adicto a ti", src: "audio/salsa/Johnny Rojas - Adicto a ti.m4a", duration: "5:32" }
+];
+
+// Ordenamos el listado de canciones por artista
+songs.sort((a, b) => a.artist > b.artist ? 1 : a.artist < b.artist ? -1 : 0);
+
+const totalSongs = songs.length;
+
+const d = document;
+
+const audio = d.querySelector("#audio");
+
+const dataTable = document.querySelector("#data-table");
+
+// Volume control
+const volumeControl = d.querySelector("#volume-control");
+const volumeDisplay = d.querySelector("#volume-display");
+const volumeBtn = d.querySelector("#volume-btn");
+let audioVolume = false;
+let currentVolume = 1; //
+// End volume control
+
+// Current time display
+const durationDisplay = d.querySelector("#duration");
+const currentTimeDisplay = d.querySelector("#current-time");
+// End curren time display
+
+// Progress bar
+const progressBar = d.querySelector("#progress-bar");
+// Variable para guardar el estado de reproducción del audio
+let wasPlaying = false;
+// End progress bar
+
+// Song list
+const songList = d.querySelector("#song-list");
+
+// Song title
+const songTitle = d.querySelector("#song-title");
+
+// Play pause btn
+const playPauseBtn = d.querySelector("#play-pause-btn");
+
+// Loop btn
+const loopBtn = d.querySelector("#loop-btn");
+let isLoop = false;
+
+// Previous btn
+const previousBtn = d.querySelector("#previous-btn");
+
+// Next btn
+const nextBtn = d.querySelector("#next-btn");
+
+loopBtn.addEventListener("click", () => {
+    isLoop = !isLoop;
+    audio.loop = isLoop;
+    loopBtn.textContent = isLoop ? "🔂" : "🔁";
+});
+
+// Volumen control
+volumeControl.addEventListener("input", (event) => {
+    volumeDisplay.innerHTML = volumeControl.value;
+    // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/volume
+    audio.volume = volumeControl.value / 100;
+    if (volumeControl.value === "0") {
+        audioVolume = true;
+        volumeBtn.innerHTML = "🔈";
+        currentVolume = .5;
+    } else {
+        audioVolume = false;
+        volumeBtn.textContent = "🔊";
+        currentVolume = volumeControl.value / 100;
+    }
+});
+
+volumeBtn.addEventListener("click", (event) => {
+    audioVolume = !audioVolume;
+    if (audioVolume) {
+        audio.volume = 0;
+        volumeControl.value = 0;
+        volumeDisplay.textContent = 0;
+        volumeBtn.innerHTML = "🔈";
+    } else {
+        audio.volume = currentVolume; // 0.1 a 1
+        volumeControl.value = currentVolume * 100; // 1 a 100
+        volumeBtn.textContent = "🔊";
+        volumeDisplay.textContent = Math.floor(currentVolume * 100); // 1 a 100
+    }
+});
+// End volumen control
+
+// Mostrar la duración del audio cuando se haya cargado
+audio.addEventListener("loadedmetadata", () => {
+    const duration = formatTime(audio.duration); // Formatear la duración
+    durationDisplay.textContent = duration; // Mostrar la duración
+    progressBar.max = audio.duration; // Ajustar el máximo de la barra de progreso
+});
+
+// Función para actualizar la barra de progreso
+audio.addEventListener("timeupdate", () => {
+    const currentTime = formatTime(audio.currentTime); // Formatear el tiempo actual
+    currentTimeDisplay.textContent = currentTime; // Mostrar el tiempo actual
+    progressBar.value = audio.currentTime;// Actualizar la barra de progreso
+});
+
+// Progress bar
+// Ajustar el tiempo de reproducción al mover la barra de progreso
+progressBar.addEventListener("input", () => {
+    audio.pause();
+    audio.currentTime = progressBar.value;  // Actualizar el tiempo del audio
+});
+
+// Antes de mover el control, guardamos el estado de reproducción del audio
+progressBar.addEventListener("mousedown", () => {
+    wasPlaying = !audio.paused;  // Guarda si el audio está reproduciéndose
+});
+
+// Reanudar el audio cuando el control deje de moverse
+progressBar.addEventListener("change", () => {
+    if (wasPlaying) {  // Solo hace play si el audio estaba en reproducción
+        audio.play();  // Reproduce el audio después de que se haya dejado de mover
+    }
+});
+// End progress bar
+
+let currentSongIndex = 0;
+
+document.addEventListener("DOMContentLoaded", () => {
+    // displaySongList();
+    displayRows();
+    const song = songs[currentSongIndex];
+    embedAudio(song.src);
+    setSongInfo(`🎵 ${song.artist} - ${song.title} 🎵`);
+});
+
+// Song list
+const displaySongList = () => {
+    const $fragment = d.createDocumentFragment();
+    for (let i = 0; i < totalSongs; i++) {
+        const song = songs[i];
+        const li = d.createElement("li");
+        li.textContent = `${i + 1}. ${song.artist} - ${song.title} ${song.duration}`;
+
+        if (i === currentSongIndex) li.classList.add("playing");
+
+        li.addEventListener('dblclick', (event) => {
+
+            const previous = songList.querySelector(`li.playing`);
+            if (previous) previous.classList.remove("playing");
+
+            li.classList.add("playing");
+
+            currentSongIndex = i;
+            embedAudio(song.src);
+            playAudio();
+            setSongInfo(`🎵 ${song.artist} - ${song.title} 🎵`);
+        });
+        $fragment.appendChild(li);
+    }
+    songList.appendChild($fragment);
+}
+
+// Song list
+const displayRows = () => {
+    const $fragment = d.createDocumentFragment();
+    for (let i = 0; i < totalSongs; i++) {
+        const song = songs[i];
+        const tr = d.createElement("tr");
+
+        const td1 = d.createElement('td'); // Crear celda
+        td1.textContent = `${i + 1}.`;
+        tr.appendChild(td1);
+
+        const td2 = d.createElement('td'); // Crear celda
+        td2.textContent = `${song.artist} - ${song.title}`;
+        tr.appendChild(td2);
+
+        const td3 = d.createElement('td'); // Crear celda
+        td3.textContent = `${song.duration}`;
+        tr.appendChild(td3);
+
+        if (i === currentSongIndex) tr.classList.add("playing");
+
+        tr.addEventListener('click', (event) => {
+            const p = dataTable.querySelector(`tr.selected`);
+            if (p) p.classList.remove("selected");
+            tr.classList.add("selected");
+        });
+
+        tr.addEventListener('dblclick', (event) => {
+            const previous = dataTable.querySelector(`tr.playing`);
+            if (previous) previous.classList.remove("playing");
+            tr.classList.add("playing");
+            currentSongIndex = i;
+            embedAudio(song.src);
+            playAudio();
+            setSongInfo(`🎸 ${song.artist} - ${song.title} 🎸`);
+        });
+        $fragment.appendChild(tr);
+    }
+    dataTable.appendChild($fragment);
+}
+
+previousBtn.addEventListener("click", () => {
+    // console.log(currentSongIndex);
+    currentSongIndex--;
+    if (currentSongIndex >= 0) {
+        const song = songs[currentSongIndex];
+        if (!audio.paused) { // Si el audio no esta en pausa, load and play
+            embedAudio(song.src);
+            playAudio();
+        } else {
+            embedAudio(song.src);
+        }
+        setSongInfo(`🎵 ${song.artist} - ${song.title} 🎵`);
+    } else {
+        currentSongIndex = 0;
+    }
+
+    // const current = songList.querySelector(`li.playing`);
+    // if (current) current.classList.remove("playing");
+
+    // // currentSongIndex se decremento previamente
+    // const previous = songList.children[currentSongIndex];
+    // if (previous) previous.classList.add("playing");
+
+    const current = dataTable.querySelector(`tr.playing`);
+    if (current) current.classList.remove("playing");
+
+    // currentSongIndex se decremento previamente
+    const previous = dataTable.children[currentSongIndex];
+    if (previous) previous.classList.add("playing");
+
+});
+
+nextBtn.addEventListener("click", () => {
+    // console.log(currentSongIndex);
+    currentSongIndex++;
+    if (currentSongIndex < totalSongs) {
+        const song = songs[currentSongIndex];
+        if (!audio.paused) {// Si el audio no esta en pausa, load and play
+            embedAudio(song.src);
+            playAudio();
+        } else {
+            embedAudio(song.src);
+        }
+        setSongInfo(`🎵 ${song.artist} - ${song.title} 🎵`);
+    } else {
+        currentSongIndex = totalSongs - 1;
+    }
+
+    // const previous = songList.querySelector(`li.playing`);
+    // if (previous) previous.classList.remove("playing");
+
+    // // currentSongIndex se incremento previamente
+    // const current = songList.children[currentSongIndex];
+    // // console.log(current);
+    // if (current) current.classList.add("playing");
+
+    const previous = dataTable.querySelector(`tr.playing`);
+    if (previous) previous.classList.remove("playing");
+
+    // currentSongIndex se incremento previamente
+    const current = dataTable.children[currentSongIndex];
+    // console.log(current);
+    if (current) current.classList.add("playing");
+
+});
+
+const setSongInfo = (info) => {
+    songTitle.textContent = info;
+    // checkOverflow();
+}
+
+const embedAudio = url => {
+    audio.src = url;
+    progressBar.disabled = false;
+}
+
+const playAudio = () => {
+    if (audio.src) {
+        audio.play();
+        playPauseBtn.textContent = "⏸️";
+    }
+}
+
+const pauseAudio = () => {
+    if (audio.src) {
+        audio.pause();
+        playPauseBtn.textContent = "▶️";
+    }
+}
+// End song list
+
+// Play pause btn
+playPauseBtn.addEventListener("click", () => {
+    if (!audio.src) return;
+    if (audio.paused) {
+        playAudio();
+    } else {
+        pauseAudio();
+    }
+});
+
+audio.addEventListener('ended', function () {
+    playPauseBtn.textContent = "▶️";
+    currentSongIndex++;
+    if (currentSongIndex < totalSongs) {
+        const song = songs[currentSongIndex];
+        embedAudio(song.src);
+        playAudio();
+        setSongInfo(`🎵 ${song.artist} - ${song.title} 🎵`);
+    } else {
+        currentSongIndex = totalSongs - 1;
+        // audio.removeAttribute("src");
+        // setSongInfo(`Nada esta sonando`);
+        // progressBar.value = 0;
+        // progressBar.disabled = true;
+        // durationDisplay.textContent = currentTimeDisplay.textContent = "0:00";
+    }
+    // console.log(currentSongIndex);
+    // const previous = songList.querySelector(`li.playing`);
+    // if (previous) previous.classList.remove("playing");
+
+    // // currentSongIndex se incremento previamente
+    // const current = songList.children[currentSongIndex];
+    // // console.log(current);
+    // if (current) current.classList.add("playing");
+
+    const previous = dataTable.querySelector(`tr.playing`);
+    if (previous) previous.classList.remove("playing");
+
+    // currentSongIndex se incremento previamente
+    const current = dataTable.children[currentSongIndex];
+    // console.log(current);
+    if (current) current.classList.add("playing");
+});
+
+// Functions
+// Format time in hh:mm:ss or mm:ss
+function formatTime(seconds) {
+    /**
+     * 1 h. = 60 m.
+     * 1 m. = 60 s.
+     * 1 s. = 1000 ms.
+     * hours to minutes: 3 * 60 = 180 minutes
+     * minutes to seconds: 120 * 60 = 7.200 seconds
+     * seconds to milliseconds: 218.122448 * 1000 = 218.122.448.000
+     **/
+    const hours = (seconds / 3600) | 0;  // Hours calculation
+    const minutes = ((seconds % 3600) / 60) | 0;  // Minutes calculation
+    const remainingSeconds = Math.floor(seconds % 60);  // Whole seconds
+
+    // Conditional formatting: Only show hours if greater than 0
+    return hours > 0
+        // Show hours:minutes:seconds format
+        ? `${hours}:${minutes < 10 ? '0' + minutes : minutes}:${remainingSeconds < 10 ? '0' + remainingSeconds : remainingSeconds}`
+        // Show minutes:seconds format
+        : `${/*minutes < 10 ? '0' + minutes :*/ minutes}:${remainingSeconds < 10 ? '0' + remainingSeconds : remainingSeconds}`;
+}
+
+const shuffle = arr => {
+    const len = arr.length;
+    for (let i = 0; i < len; i++) {
+        const r = i + Math.floor(Math.random() * (len - i));
+        [arr[i], arr[r]] = [arr[r], arr[i]];
+    }
+}
