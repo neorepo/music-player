@@ -86,8 +86,8 @@ shuffleBtn.addEventListener("click", () => {
     // }
 
     // Opción 2
-    // const dataContent = isShuffle ? "🟩" : "⬛";
-    // shuffleBtn.setAttribute('data-content', dataContent);
+    const dataContent = isShuffle ? "🟩 " : "⬛ ";
+    shuffleBtn.setAttribute('data-content', dataContent);
 });
 
 loopBtn.addEventListener("click", () => {
