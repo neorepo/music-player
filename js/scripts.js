@@ -72,6 +72,12 @@ let isShuffle = false;
 shuffleBtn.addEventListener("click", () => {
     isShuffle = !isShuffle;
 
+    // if (isShuffle) {
+    //     alert("Shuffle mode on!");
+    // } else {
+    //     alert("Shuffle mode off!");
+    // }
+
     // Opción 1
     // if (isShuffle) {
     //     shuffleBtn.setAttribute('data-content', "🟩");
@@ -80,8 +86,8 @@ shuffleBtn.addEventListener("click", () => {
     // }
 
     // Opción 2
-    const dataContent = isShuffle ? "🟩" : "⬛";
-    shuffleBtn.setAttribute('data-content', dataContent);
+    // const dataContent = isShuffle ? "🟩" : "⬛";
+    // shuffleBtn.setAttribute('data-content', dataContent);
 });
 
 loopBtn.addEventListener("click", () => {
