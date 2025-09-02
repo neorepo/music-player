@@ -28,7 +28,7 @@ const d = document;
 const audio = d.querySelector("#audio");
 
 // Song list
-const dataTable = document.querySelector("#data-table");
+const dataTable = d.querySelector("#data-table");
 
 // Volume control
 const volumeControl = d.querySelector("#volume-control");
@@ -143,7 +143,7 @@ progressBar.addEventListener("change", () => {
 
 let currentSongIndex = 0;
 
-document.addEventListener("DOMContentLoaded", () => {
+d.addEventListener("DOMContentLoaded", () => {
     displaySongList();
     const song = songs[currentSongIndex];
     embedAudio(song.src);
