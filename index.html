@@ -46,7 +46,14 @@
         </div>
 
         <div style="display: flex;justify-content: center;gap: 8px;align-items: center;margin-top: .5rem;">
-            <!-- <span id="shuffle-btn" class="emoji">🔀</span> -->
+            <style>
+                #shuffle-btn::before {
+                    content: attr(data-content);
+                    font-size: 8px;
+                    vertical-align: middle;
+                }
+            </style>
+            <span id="shuffle-btn" class="emoji" title="Toggle shuffle" data-content="⬛">🔀</span>
             <span id="previous-btn" class="emoji" title="Previous track">⏮️</span>
             <span id="play-pause-btn" class="emoji" title="Play/Pause">▶️</span> <!--https://www.rae.es/dpd/barra-->
             <span id="next-btn" class="emoji" title="Next track">⏭️</span>

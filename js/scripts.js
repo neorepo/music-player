@@ -65,6 +65,25 @@ const previousBtn = d.querySelector("#previous-btn");
 // Next btn
 const nextBtn = d.querySelector("#next-btn");
 
+// Shuffle btn
+const shuffleBtn = d.querySelector("#shuffle-btn");
+let isShuffle = false;
+
+shuffleBtn.addEventListener("click", () => {
+    isShuffle = !isShuffle;
+
+    // Opción 1
+    // if (isShuffle) {
+    //     shuffleBtn.setAttribute('data-content', "🟩");
+    // } else {
+    //     shuffleBtn.setAttribute('data-content', "⬛");
+    // }
+
+    // Opción 2
+    const dataContent = isShuffle ? "🟩" : "⬛";
+    shuffleBtn.setAttribute('data-content', dataContent);
+});
+
 loopBtn.addEventListener("click", () => {
     isLoop = !isLoop;
     audio.loop = isLoop;
@@ -149,9 +168,10 @@ d.addEventListener("DOMContentLoaded", () => {
     embedAudio(song.src);
     setSongInfo(`🎵 ${song.artist} - ${song.title} 🎵`);
 
-    // When DOM content loaded reset the progress bar and volume control
+    // When DOM content loaded reset the progress bar, volume control and container scroll.
     progressBar.value = 0;
     volumeControl.value = 100;
+    dataTable.parentElement.scrollTop = 0;
 });
 
 // Song list
@@ -336,7 +356,7 @@ const shuffle = arr => {
 const addCssClass = (element, cssClass) => {
     element.classList.add(cssClass);
     // element.scrollIntoView({ behavior: "smooth", block: "center" });
-    const container = element.parentElement.parentElement
+    const container = element.parentElement.parentElement;
     // container.scrollTop = element.offsetTop;
     container.scrollTop = element.offsetTop - (container.clientHeight / 2) + (element.offsetHeight / 2);
 }
