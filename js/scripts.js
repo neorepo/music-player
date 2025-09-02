@@ -148,6 +148,10 @@ d.addEventListener("DOMContentLoaded", () => {
     const song = songs[currentSongIndex];
     embedAudio(song.src);
     setSongInfo(`🎵 ${song.artist} - ${song.title} 🎵`);
+
+    // When DOM content loaded reset the progress bar and volume control
+    progressBar.value = 0;
+    volumeControl.value = 100;
 });
 
 // Song list
