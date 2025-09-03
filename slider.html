@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slider</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            /* padding: 0; */
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-size: 13.33px;
+            background-color: #0d1117;
+            color: #dee2e6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 300px;
+            padding: 1rem;
+            margin: auto;
+            user-select: none;
+        }
+
+        #volume-control {}
+
+        input[type="range"] {
+            margin: 0;
+        }
+
+        input[type="range"] {
+            background-color: transparent;
+        }
+
+        /* https://developer.mozilla.org/en-US/docs/Web/CSS/::-moz-range-track */
+        input[type="range"]::-moz-range-progress {
+            background-color: #ff9800;
+            height: 4px;
+            border-radius: 4px;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            background-color: #fafafa;
+            border: none;
+        }
+
+        input[type="range"]::-moz-range-track {
+            background-color: #e7e7eb;
+            height: 4px;
+            border-radius: 4px;
+        }
+
+        .emoji {
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <main>
+
+        <audio id="audio" src="audio/salsa/Nino Segarra - Porque te amo.m4a"></audio>
+
+        <div class="container">
+
+            <div>
+                <p id="song-title" style="text-align: center;margin-bottom: .5rem;">Hola mundo!!!</p>
+            </div>
+
+            <div class="progress-container" style="display: flex;gap: 4px;align-items: center;">
+                <span id="current-time" style="text-align: left;width: 10%;">0:00</span>
+
+                <input type="range" name="progress-bar" id="progress-bar" min="0" max="100" value="0" step="0.1"
+                    style="width: 80%;">
+
+                <span id="duration" style="text-align: right;width: 10%;">0:00</span>
+            </div>
+
+            <div class="volume-container" style="display: flex;gap: 4px;align-items: center;">
+                <span id="volume-btn" style="text-align: left;width: 10%;cursor: pointer;" class="emoji">🔊</span>
+
+                <input type="range" name="volume-control" id="volume-control" min="0" max="100" value="100" step="1"
+                    style="width: 80%;">
+
+                <span id="volume-display" style="text-align: right;width: 10%;">100</span>
+            </div>
+
+            <div class="controls">
+                <span id="play-pause-btn" class="emoji" title="Play/Pause" style="cursor: pointer;">▶️</span>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        "use strict";
+
+        const d = document;
+
+        const audio = d.querySelector("#audio");
+
+        const songTitle = d.querySelector("#song-title");
+        const playPauseBtn = d.querySelector("#play-pause-btn");
+        const duration = d.querySelector("#duration");
+        const currentTime = d.querySelector("#current-time");
+
+        const volumeControl = d.querySelector("#volume-control");
+        let currentVolume = 1; // Volume 100 %
+        const volumeDisplay = d.querySelector("#volume-display");
+        const volumeBtn = d.querySelector("#volume-btn");
+        const progressBar = d.querySelector("#progress-bar");
+
+        songTitle.textContent = decodeURIComponent(audio.src.slice(audio.src.lastIndexOf("/") + 1, audio.src.lastIndexOf(".")));
+
+        playPauseBtn.addEventListener("click", (event) => {
+            if (audio.paused) {
+                audio.play();
+                playPauseBtn.textContent = "⏸️";
+            } else {
+                audio.pause();
+                playPauseBtn.textContent = "▶️";
+            }
+
+        });
+
+        audio.addEventListener("loadedmetadata", (event) => {
+            // Duration in seconds: example => 287.370158
+            duration.textContent = formatTime(audio.duration);
+            progressBar.max = audio.duration; // Ajustar el máximo de la barra de progreso
+
+        });
+
+        audio.addEventListener("timeupdate", () => {
+            // Current time in seconds: example => 7.897868
+            currentTime.textContent = formatTime(audio.currentTime);
+            progressBar.value = audio.currentTime;
+
+        });
+
+        audio.addEventListener('ended', function () {
+            playPauseBtn.textContent = "▶️";
+
+        });
+
+        progressBar.addEventListener("input", () => {
+            audio.currentTime = progressBar.value;
+
+        });
+
+        volumeControl.addEventListener("input", (event) => {
+            volumeDisplay.textContent = volumeControl.value;
+            audio.volume = volumeControl.value / 100;
+            if (volumeControl.value === "0") {
+                volumeBtn.textContent = "🔈";
+                audio.muted = true;
+                currentVolume = .5; // 50 %
+            } else {
+                volumeBtn.textContent = "🔊";
+                audio.muted = false;
+                currentVolume = volumeControl.value / 100; //  Values between 0 y 100
+            }
+
+        });
+
+        volumeBtn.addEventListener("click", () => {
+            audio.muted = !audio.muted;
+            if (audio.muted) {
+                audio.volume = 0;
+                volumeControl.value = 0;
+                volumeBtn.textContent = "🔈";
+            } else {
+                audio.volume = currentVolume; // Values 0.1 and 1, where 1 = 100 %
+                volumeControl.value = currentVolume * 100; // Values are between 0 and 100
+                volumeBtn.textContent = "🔊";
+            }
+            volumeDisplay.textContent = volumeControl.value;
+
+        });
+
+        d.addEventListener("DOMContentLoaded", (event) => {
+            volumeControl.value = 100;
+            progressBar.value = 0;
+
+        });
+
+        // Format time in hh:mm:ss or mm:ss
+        const formatTime = (seconds) => {
+            const hours = (seconds / 3600) | 0;  // Hours calculation
+            const minutes = ((seconds % 3600) / 60) | 0;  // Minutes calculation
+            const remainingSeconds = Math.round(seconds % 60);  // Whole seconds
+
+            return hours > 0
+                // Show hours:minutes:seconds format
+                ? `${hours}:${/*minutes < 10 ? '0' + minutes : */minutes}:${remainingSeconds < 10 ? '0' + remainingSeconds : remainingSeconds}`
+                // Show minutes:seconds format
+                : `${/*minutes < 10 ? '0' + minutes :*/ minutes}:${remainingSeconds < 10 ? '0' + remainingSeconds : remainingSeconds}`;
+
+        }
+
+    </script>
+</body>
+
+</html>

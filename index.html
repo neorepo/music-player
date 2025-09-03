@@ -24,22 +24,23 @@
 
         <div class="text-center">
             <h1 style="font-weight: 400;">My Music Player</h1>
-            <p>Melodía, ritmo y armonía, combinados.<br>Pone play ▶️ a tu mundo.</p>
+            <p>Melodía, ritmo y armonía, combinados.<br>Poné play ▶️ a tu mundo.</p>
         </div>
 
         <div style="overflow: hidden;position: relative;" class="text-center">
             <p id="song-title" style="white-space: nowrap;">Nada esta sonando</p>
         </div>
 
+        <!-- Progress container -->
         <div style="display: flex;align-items: center;gap: 4px;">
-            <span id="current-time">0:00</span>
+            <span id="current-time" style="text-align: left;width: 10%;">0:00</span>
             <input type="range" name="progress-bar" id="progress-bar" min="0" max="100" value="0" step="0.1"
-                style="width: 100%;">
-            <span id="duration">0:00</span>
+                style="width: 80%;">
+            <span id="duration" style="text-align: right;width: 10%;">0:00</span>
         </div>
-
-        <div style="display: flex;align-items: center;">
-            <span id="volume-btn" style="cursor: pointer;width: 10%;">🔊</span>
+        <!-- Volume container -->
+        <div style="display: flex;align-items: center;gap: 4px;">
+            <span id="volume-btn" style="cursor: pointer;width: 10%;text-align: left;">🔊</span>
             <input type="range" name="volume-control" id="volume-control" min="0" max="100" value="100" step="1"
                 style="width: 80%;">
             <span id="volume-display" style="width: 10%;text-align: right;">100</span>
