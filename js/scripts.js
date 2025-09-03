@@ -31,23 +31,19 @@ const audio = d.querySelector("#audio");
 const dataTable = d.querySelector("#data-table");
 
 // Volume control
-const volumeControl = d.querySelector("#volume-control");
+const volumeSlider = d.querySelector("#volume-slider");
 const volumeDisplay = d.querySelector("#volume-display");
 const volumeBtn = d.querySelector("#volume-btn");
-let audioVolume = false;
 let currentVolume = 1; //
 // End volume control
 
-// Current time display
+// Audio current time display
 const durationDisplay = d.querySelector("#duration");
 const currentTimeDisplay = d.querySelector("#current-time");
-// End curren time display
+// End audio current time display
 
-// Progress bar
-const progressBar = d.querySelector("#progress-bar");
-// Variable para guardar el estado de reproducción del audio
-let wasPlaying = false;
-// End progress bar
+// Audio current time slider
+const audioCurrentTimeSlider = d.querySelector("#audio-current-time-slider");
 
 // Song title
 const songTitle = d.querySelector("#song-title");
@@ -96,17 +92,17 @@ loopBtn.addEventListener("click", () => {
 });
 
 // Volumen control
-volumeControl.addEventListener("input", (event) => {
-    volumeDisplay.textContent = volumeControl.value;
-    audio.volume = volumeControl.value / 100;
-    if (volumeControl.value === "0") {
+volumeSlider.addEventListener("input", () => {
+    volumeDisplay.textContent = volumeSlider.value;
+    audio.volume = volumeSlider.value / 100;
+    if (volumeSlider.value === "0") {
         volumeBtn.textContent = "🔈";
         audio.muted = true;
         currentVolume = .5; // 50 %
     } else {
         volumeBtn.textContent = "🔊";
         audio.muted = false;
-        currentVolume = volumeControl.value / 100; //  Values between 0 y 100
+        currentVolume = volumeSlider.value / 100; //  Values between 0 y 100
     }
 
 });
@@ -115,33 +111,33 @@ volumeBtn.addEventListener("click", () => {
     audio.muted = !audio.muted;
     if (audio.muted) {
         audio.volume = 0;
-        volumeControl.value = 0;
+        volumeSlider.value = 0;
         volumeBtn.textContent = "🔈";
     } else {
         audio.volume = currentVolume; // Values 0.1 and 1, where 1 = 100 %
-        volumeControl.value = currentVolume * 100; // Values are between 0 and 100
+        volumeSlider.value = currentVolume * 100; // Values are between 0 and 100
         volumeBtn.textContent = "🔊";
     }
-    volumeDisplay.textContent = volumeControl.value;
+    volumeDisplay.textContent = volumeSlider.value;
 });
 // End volumen control
 
 // Mostrar la duración del audio cuando se haya cargado
 audio.addEventListener("loadedmetadata", () => {
     durationDisplay.textContent = formatTime(audio.duration); // Formatear la duración y mostrar
-    progressBar.max = audio.duration; // Ajustar el máximo de la barra de progreso
+    audioCurrentTimeSlider.max = audio.duration; // Ajustar el máximo de la barra de progreso
 });
 
 // Función para actualizar la barra de progreso
 audio.addEventListener("timeupdate", () => {
     currentTimeDisplay.textContent = formatTime(audio.currentTime); // Formatear el tiempo actual y mostrar
-    progressBar.value = audio.currentTime;// Actualizar la barra de progreso
+    audioCurrentTimeSlider.value = audio.currentTime;// Actualizar la barra de progreso
 });
 
 // Progress bar
 // Ajustar el tiempo de reproducción al mover la barra de progreso
-progressBar.addEventListener("input", () => {
-    audio.currentTime = progressBar.value;  // Actualizar el tiempo del audio
+audioCurrentTimeSlider.addEventListener("input", () => {
+    audio.currentTime = audioCurrentTimeSlider.value;  // Actualizar el tiempo del audio
 });
 
 // End progress bar
@@ -155,8 +151,8 @@ d.addEventListener("DOMContentLoaded", () => {
     setSongInfo(`🎵 ${song.artist} - ${song.title} 🎵`);
 
     // When DOM content loaded reset the progress bar, volume control and container scroll.
-    progressBar.value = 0;
-    volumeControl.value = 100;
+    audioCurrentTimeSlider.value = 0;
+    volumeSlider.value = 100;
     dataTable.parentElement.scrollTop = 0;
 });
 
@@ -181,13 +177,13 @@ const displaySongList = () => {
 
         if (i === currentSongIndex) tr.classList.add("playing");
 
-        tr.addEventListener('click', (event) => {
+        tr.addEventListener('click', () => {
             const p = dataTable.querySelector(`tr.selected`);
             if (p) p.classList.remove("selected");
             tr.classList.add("selected");
         });
 
-        tr.addEventListener('dblclick', (event) => {
+        tr.addEventListener('dblclick', () => {
             const previous = dataTable.querySelector(`tr.playing`);
             if (previous) previous.classList.remove("playing");
             addCssClass(tr, "playing");
@@ -252,14 +248,14 @@ nextBtn.addEventListener("click", () => {
 
 });
 
-const setSongInfo = (info) => {
+const setSongInfo = info => {
     songTitle.textContent = info;
     // checkOverflow();
 }
 
 const embedAudio = url => {
     audio.src = url;
-    progressBar.disabled = false;
+    audioCurrentTimeSlider.disabled = false;
 }
 
 const playAudio = () => {
@@ -287,7 +283,7 @@ playPauseBtn.addEventListener("click", () => {
     }
 });
 
-audio.addEventListener('ended', function () {
+audio.addEventListener('ended', () => {
     playPauseBtn.textContent = "▶️";
     currentSongIndex++;
     if (currentSongIndex < totalSongs) {

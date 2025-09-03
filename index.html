@@ -31,21 +31,21 @@
             <p id="song-title" style="white-space: nowrap;">Nada esta sonando</p>
         </div>
 
-        <!-- Progress container -->
+        <!-- Audio current time container -->
         <div style="display: flex;align-items: center;gap: 4px;">
             <span id="current-time" style="text-align: left;width: 10%;">0:00</span>
-            <input type="range" name="progress-bar" id="progress-bar" min="0" max="100" value="0" step="0.1"
+            <input type="range" id="audio-current-time-slider" min="0" max="100" value="0" step="0.1"
                 style="width: 80%;">
             <span id="duration" style="text-align: right;width: 10%;">0:00</span>
         </div>
         <!-- Volume container -->
         <div style="display: flex;align-items: center;gap: 4px;">
             <span id="volume-btn" style="cursor: pointer;width: 10%;text-align: left;">🔊</span>
-            <input type="range" name="volume-control" id="volume-control" min="0" max="100" value="100" step="1"
+            <input type="range" id="volume-slider" min="0" max="100" value="100" step="1"
                 style="width: 80%;">
             <span id="volume-display" style="width: 10%;text-align: right;">100</span>
         </div>
-
+        <!-- Controls container -->
         <div style="display: flex;justify-content: center;gap: 8px;align-items: center;margin-top: .5rem;">
             <style>
                 #shuffle-btn::before {
@@ -61,7 +61,7 @@
             <span id="next-btn" class="emoji" title="Next track">⏭️</span>
             <span id="loop-btn" class="emoji" title="Repeat track">🔁</span>
         </div>
-
+        <!-- Song list container -->
         <div style="border: 1px solid #dee2e6;border-radius: .25rem;height: 218px;overflow-y: auto;" class="mt-1">
             <table id="data-table"></table>
         </div>
