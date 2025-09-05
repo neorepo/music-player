@@ -194,9 +194,10 @@
 
         // Format time in hh:mm:ss or mm:ss
         const formatTime = (seconds) => {
+            seconds = Math.round(seconds);
             const hours = (seconds / 3600) | 0;  // Hours calculation
             const minutes = ((seconds % 3600) / 60) | 0;  // Minutes calculation
-            const remainingSeconds = Math.round(seconds % 60);  // Whole seconds
+            const remainingSeconds = (seconds % 60);  // Whole seconds
 
             return hours > 0
                 // Show hours:minutes:seconds format

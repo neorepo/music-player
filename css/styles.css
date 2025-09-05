@@ -23,6 +23,10 @@ input[type="range"]::-moz-range-progress {
     border-radius: 4px;
 }
 
+input[type="range"]::-moz-range-thumb:hover {
+    background-color: #ff9800;
+}
+
 input[type="range"]::-moz-range-thumb {
     /* background-color: #676774; */
     background-color: #fafafa;
