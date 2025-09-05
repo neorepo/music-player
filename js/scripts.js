@@ -82,7 +82,9 @@ shuffleBtn.addEventListener("click", () => {
     // }
 
     // Opción 2
-    shuffleBtn.setAttribute('data-content', isShuffle ? "🟩 " : "⬛ ");
+    // shuffleBtn.setAttribute('data-content', isShuffle ? "🟩 " : "⬛ ");
+    // Opción 3
+    shuffleBtn.nextElementSibling.style.display = isShuffle ? "block" : "none";
 });
 
 loopBtn.addEventListener("click", () => {

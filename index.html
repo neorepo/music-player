@@ -41,21 +41,25 @@
         <!-- Volume container -->
         <div style="display: flex;align-items: center;gap: 4px;">
             <span id="volume-btn" style="cursor: pointer;width: 10%;text-align: left;">🔊</span>
-            <input type="range" id="volume-slider" min="0" max="100" value="100" step="1"
-                style="width: 80%;">
+            <input type="range" id="volume-slider" min="0" max="100" value="100" step="1" style="width: 80%;">
             <span id="volume-display" style="width: 10%;text-align: right;">100</span>
         </div>
         <!-- Controls container -->
         <div style="display: flex;justify-content: center;gap: 8px;align-items: center;margin-top: .5rem;">
             <style>
                 #shuffle-btn::before {
-                    content: attr(data-content);
+                    /* content: attr(data-content);
                     font-size: 7px;
                     vertical-align: middle;
-                    font-weight: bold;
+                    font-weight: bold; */
                 }
             </style>
-            <span id="shuffle-btn" class="emoji" title="Toggle shuffle" data-content="⬛ ">🔀</span>
+            <!-- <span id="shuffle-btn" class="emoji" title="Toggle shuffle" data-content="⬛ ">🔀</span> -->
+            <div style="position: relative;">
+                <span id="shuffle-btn" title="Toggle shuffle" class="emoji">🔀</span>
+                <div style="height: 3px;width: 15.3px;background-color: #16c60c;
+            position: absolute;left: 6px;top: 28px;display: none;"></div>
+            </div>
             <span id="previous-btn" class="emoji" title="Previous track">⏮️</span>
             <span id="play-pause-btn" class="emoji" title="Play/Pause">▶️</span> <!--https://www.rae.es/dpd/barra-->
             <span id="next-btn" class="emoji" title="Next track">⏭️</span>
