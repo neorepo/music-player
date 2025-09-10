@@ -98,10 +98,12 @@ volumeSlider.addEventListener("input", () => {
     audio.volume = volumeSlider.value / 100;
     if (volumeSlider.value === "0") {
         volumeBtn.textContent = "🔈";
+        volumeBtn.title = "Unmuted";
         audio.muted = true;
         currentVolume = .5; // 50 %
     } else {
         volumeBtn.textContent = "🔊";
+        volumeBtn.title = "Muted";
         audio.muted = false;
         currentVolume = volumeSlider.value / 100; //  Values between 0 y 100
     }
@@ -114,10 +116,12 @@ volumeBtn.addEventListener("click", () => {
         audio.volume = 0;
         volumeSlider.value = 0;
         volumeBtn.textContent = "🔈";
+        volumeBtn.title = "Unmuted";
     } else {
         audio.volume = currentVolume; // Values 0.1 and 1, where 1 = 100 %
         volumeSlider.value = currentVolume * 100; // Values are between 0 and 100
         volumeBtn.textContent = "🔊";
+        volumeBtn.title = "Muted";
     }
     volumeDisplay.textContent = volumeSlider.value;
 });
@@ -160,41 +164,31 @@ d.addEventListener("DOMContentLoaded", () => {
 // Song list
 const displaySongList = () => {
     const $fragment = d.createDocumentFragment();
-    for (let i = 0; i < totalSongs; i++) {
-        const song = songs[i];
-        const tr = d.createElement("tr");
-
-        const td1 = d.createElement('td'); // Crear celda
-        td1.textContent = `${i + 1}.`;
-        tr.appendChild(td1);
-
-        const td2 = d.createElement('td'); // Crear celda
-        td2.textContent = `${song.artist} - ${song.title}`;
-        tr.appendChild(td2);
-
-        const td3 = d.createElement('td'); // Crear celda
-        td3.textContent = `${song.duration}`;
-        tr.appendChild(td3);
-
-        if (i === currentSongIndex) tr.classList.add("playing");
-
-        tr.addEventListener('click', () => {
-            const p = dataTable.querySelector(`tr.selected`);
-            if (p) p.classList.remove("selected");
-            tr.classList.add("selected");
+    songs.forEach((song, idx) => {
+        const row = d.createElement("tr");
+        row.innerHTML = `
+            <td>${idx + 1}.</td>
+            <td>${song.artist} - ${song.title}</td>
+            <td>${song.duration}</td>`;
+        if (idx === currentSongIndex && audio.src !== "") {
+            row.classList.add("playing");
+        }
+        row.addEventListener('click', () => {
+            const previousSelected = dataTable.querySelector(`tr.selected`);
+            if (previousSelected) previousSelected.classList.remove("selected");
+            row.classList.add("selected");
         });
-
-        tr.addEventListener('dblclick', () => {
+        row.addEventListener('dblclick', () => {
             const previous = dataTable.querySelector(`tr.playing`);
             if (previous) previous.classList.remove("playing");
-            addCssClass(tr, "playing");
-            currentSongIndex = i;
+            addCssClass(row, "playing");
+            currentSongIndex = idx;
             embedAudio(song.src);
             playAudio();
             setSongInfo(`🎸 ${song.artist} - ${song.title} 🎸`);
         });
-        $fragment.appendChild(tr);
-    }
+        $fragment.appendChild(row);
+    });
     dataTable.appendChild($fragment);
 }
 
