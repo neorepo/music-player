@@ -150,7 +150,7 @@
         }
 
         #play-list {
-            height: 257px;
+            height: 157px;
             border: 1px solid;
             overflow-y: auto;
             overflow-x: hidden;
@@ -371,7 +371,6 @@
             shuffleBtn.style.color = isShuffle ? "#ff9800" : "currentColor";
             if (isShuffle) {
                 shuffle(songs);
-                console.log(songs);
                 // displayRows();
                 index = -1;
             }
@@ -517,6 +516,9 @@
         const addCssClass = (cssClass) => {
             const elt = dataTable.querySelector(`tr[data-id='${songs[index].id}']`);
             if (elt) elt.classList.add(cssClass);
+
+            const container = elt.parentElement.parentElement;
+            container.scrollTop = elt.offsetTop - (container.clientHeight / 2) + (elt.offsetHeight / 2);
         }
 
         // https://introcs.cs.princeton.edu/java/14array/Deck.java.html

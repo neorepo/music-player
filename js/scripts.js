@@ -170,7 +170,8 @@ const displaySongList = () => {
             <td>${idx + 1}.</td>
             <td>${song.artist} - ${song.title}</td>
             <td>${song.duration}</td>`;
-        if (idx === currentSongIndex && audio.src !== "") {
+
+        if (idx === currentSongIndex) {
             row.classList.add("playing");
         }
         row.addEventListener('click', () => {
