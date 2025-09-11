@@ -40,7 +40,6 @@
             max-width: 280px;
             padding: 1rem;
             margin: auto;
-            font-size: 12px;
         }
 
         #song-title-container {
@@ -74,7 +73,7 @@
             border-collapse: collapse;
             width: 100%;
             user-select: none;
-            /* font-size: 12px; */
+            font-size: 12px;
             table-layout: fixed;
         }
 
@@ -147,6 +146,7 @@
 
         #volume-display {
             text-align: right;
+            font-size: 12px;
         }
 
         #play-list {
@@ -252,7 +252,7 @@
         </div>
 
         <div class="text-center" style="margin-top: 1.5rem;">
-            <p>Copyright ©️ 2025 | Made with ❤️ by Julio</p>
+            <p style="font-size: 12px;">Copyright ©️ 2025 | Made with ❤️ by Julio</p>
         </div>
 
     </main>
@@ -292,6 +292,7 @@
         const load = song => {
             audio.src = song.src;
             songTitle.textContent = `🎵 ${song.artist} - ${song.title} 🎵`;
+            audio.dataset.songId = song.id;
         }
 
         let index = 0;
@@ -373,6 +374,8 @@
                 shuffle(songs);
                 // displayRows();
                 index = -1;
+            } else {
+                console.log(audio.dataset['songId']);
             }
             if (index > -1) {
                 removeCssClass("playing");
