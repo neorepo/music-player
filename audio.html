@@ -287,6 +287,8 @@
         // Ordenamos el listado de canciones por artista
         songs.sort((a, b) => a.artist > b.artist ? 1 : a.artist < b.artist ? -1 : 0);
 
+        let songsCopy = [...songs];
+
         const songTitle = d.querySelector("#song-title");
 
         const load = song => {
@@ -303,7 +305,7 @@
 
         const init = () => {
             // Cargamos el indice cero
-            const song = songs[index];
+            const song = songsCopy[index];
             // 1. Cargamos el audio
             load(song);
             // 2. Mostramos la lista de canciones
@@ -334,7 +336,7 @@
         forwardBtn.addEventListener("click", () => {
             if (index >= totalSongs - 1) return;
             index++;
-            const song = songs[index];
+            const song = songsCopy[index];
             if (!audio.paused) {
                 load(song);
                 audio.play();
@@ -351,7 +353,7 @@
         backwardBtn.addEventListener("click", () => {
             if (index < 1) return;
             index--;
-            const song = songs[index];
+            const song = songsCopy[index];
             if (!audio.paused) {
                 load(song);
                 audio.play();
@@ -371,12 +373,15 @@
             // Cambiamos el color al elemento span, no al SVG
             shuffleBtn.style.color = isShuffle ? "#ff9800" : "currentColor";
             if (isShuffle) {
-                shuffle(songs);
+                shuffle(songsCopy);
                 // displayRows();
                 index = -1;
             } else {
-                console.log(audio.dataset['songId']);
+                const searchId = audio.dataset['songId'];
+                index = songs.findIndex(song => song.id == searchId);
+                songsCopy = [...songs];
             }
+
             if (index > -1) {
                 removeCssClass("playing");
                 addCssClass("playing");
@@ -406,7 +411,7 @@
                 return;
             }
             index++;
-            const song = songs[index];
+            const song = songsCopy[index];
             load(song);
             audio.play();
 
@@ -419,7 +424,7 @@
         const displayRows = () => {
             dataTable.textContent = "";
             const fragment = document.createDocumentFragment();
-            songs.forEach((song, idx) => {
+            songsCopy.forEach((song, idx) => {
                 const row = document.createElement('tr');
                 row.dataset.id = song.id;
                 // Create table cells (td) for each song property
@@ -517,7 +522,7 @@
         }
 
         const addCssClass = (cssClass) => {
-            const elt = dataTable.querySelector(`tr[data-id='${songs[index].id}']`);
+            const elt = dataTable.querySelector(`tr[data-id='${songsCopy[index].id}']`);
             if (elt) elt.classList.add(cssClass);
 
             const container = elt.parentElement.parentElement;
