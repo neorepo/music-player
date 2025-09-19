@@ -4,7 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audio</title>
+    <meta name="description" content="Music Player">
+    <meta name="keywords"
+        content="Audio Player, Music Player, Reproductor de música, Reproductor de audio, HTML, CSS, JavaScript">
+    <meta name="author" content="Julio César">
+    <title>Audio Player</title>
+    <link rel="shortcut icon" href="images/headphone.PNG" type="image/png" sizes="16x16 32x32">
+
     <style>
         * {
             box-sizing: border-box;
@@ -299,7 +305,7 @@
 
         let index = 0;
 
-        document.addEventListener("DOMContentLoaded", () => {
+        d.addEventListener("DOMContentLoaded", () => {
             init();
         });
 
@@ -309,7 +315,7 @@
             // 1. Cargamos el audio
             load(song);
             // 2. Mostramos la lista de canciones
-            displayRows();
+            displayRows(songsCopy);
             // Reseteamos los valores
             volumeSlider.value = 100;
             audioCurrentTimeSlider.value = 0;
@@ -376,11 +382,13 @@
             shuffleBtn.style.color = isShuffle ? "#ff9800" : "currentColor";
             if (isShuffle) {
                 shuffle(songsCopy);
-                // displayRows();
                 index = -1;
             } else {
+                // Buscamos el id de la canción actual
                 const searchId = audio.dataset['songId'];
+                // Buscamos el índice en el array original
                 index = songs.findIndex(song => song.id == searchId);
+                // Devolvemos el orden del array original
                 songsCopy = [...songs];
             }
 
@@ -423,11 +431,11 @@
 
         const dataTable = d.querySelector("#data-table");
 
-        const displayRows = () => {
+        const displayRows = (rows) => {
             dataTable.textContent = "";
-            const fragment = document.createDocumentFragment();
-            songsCopy.forEach((song, idx) => {
-                const row = document.createElement('tr');
+            const fragment = d.createDocumentFragment();
+            rows.forEach((song, idx) => {
+                const row = d.createElement('tr');
                 row.dataset.id = song.id;
                 // Create table cells (td) for each song property
                 row.innerHTML = `
@@ -552,7 +560,6 @@
                 ? `${hours}:${/*minutes < 10 ? '0' + minutes : */minutes}:${remainingSeconds < 10 ? '0' + remainingSeconds : remainingSeconds}`
                 // Show minutes:seconds format
                 : `${/*minutes < 10 ? '0' + minutes :*/ minutes}:${remainingSeconds < 10 ? '0' + remainingSeconds : remainingSeconds}`;
-
         }
     </script>
 
