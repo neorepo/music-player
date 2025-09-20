@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input type file</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #0b1828;
+            color: #aebeb3;
+            font-size: 13.333px;
+        }
+
+        .icon {
+            width: 1.50em;
+            height: 1.50em;
+            cursor: pointer;
+        }
+
+        #input-file {
+            display: none;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 280px;
+            padding: 1rem;
+            margin: auto;
+        }
+
+        #song-title-container {
+            overflow: hidden;
+            position: relative;
+        }
+
+        #song-title {
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        #song-title {
+            animation: slideIn 16s linear infinite;
+        }
+
+        /* Definición de la animación para el desplazamiento */
+        @keyframes slideIn {
+            0% {
+                transform: translateX(100%);
+                /* Comienza fuera de la pantalla por la derecha */
+            }
+
+            100% {
+                transform: translateX(-100%);
+                /* Se mueve hacia fuera de la pantalla por la izquierda */
+            }
+        }
+
+        #data-table {
+            border-collapse: collapse;
+            width: 100%;
+            user-select: none;
+            font-size: 12px;
+            table-layout: fixed;
+        }
+
+        #data-table tr td:nth-child(1) {
+            width: 10%;
+        }
+
+        #data-table tr td:nth-child(2) {
+            width: 80%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        #data-table tr td:nth-child(3) {
+            width: 10%;
+        }
+
+        #data-table tr.playing {
+            color: rgb(0, 255, 0);
+        }
+
+        #data-table tr.selected {
+            background-color: rgb(0, 0, 255);
+        }
+    </style>
+</head>
+
+<body>
+
+    <header style="text-align: center;">
+        <h1>Input type file</h1>
+        <p style="color: #fb324f;">Ejemplo de procesamiento de archivos de audio.</p>
+        <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" class="icon">
+            <path fill="currentColor"
+                d="M544 56.1L544 400C544 444.2 501 480 448 480C395 480 352 444.2 352 400C352 355.8 395 320 448 320C459.2 320 470 321.6 480 324.6L480 207.9L256 257.7L256 464C256 508.2 213 544 160 544C107 544 64 508.2 64 464C64 419.8 107 384 160 384C171.2 384 182 385.6 192 388.6L192 134.4L217.1 128.8L505.1 64.8L544 56.1z" />
+        </svg> -->
+    </header>
+
+    <main class="container">
+
+        <div id="song-title-container" style="text-align: center;">
+            <p id="song-title">Nada esta cargado!!!</p>
+        </div>
+
+        <!-- Controls -->
+        <div id="controls" style="text-align: center;">
+
+            <!-- Shuffle btn -->
+            <span id="shuffle-btn" title="Activar orden aleatorio">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" class="icon">
+                    <path fill="currentColor"
+                        d="M576 192L448 296L448 224L400 224L358 280L318 226.7C350.1 183.9 366.7 161.7 368 160L448 160L448 88L576 192zM384 480L368 480L358.4 467.2L176 224L64 224L64 160L208 160L217.6 172.8L400 416L448 416L448 344L576 448L448 552L448 480L384 480zM258 413.3C225.9 456 209.3 478.3 208 480L64 480L64 416L176 416L218 360L258 413.3z" />
+                </svg>
+            </span>
+            <!-- Backward btn -->
+            <span id="backward-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" class="icon">
+                    <path fill="currentColor"
+                        d="M576 558.5C560.3 544.7 485.6 479.4 352 362.5L352 558.5C336.3 544.7 261.6 479.4 128 362.5L128 544L64 544L64 96L128 96L128 277.5C261.6 160.6 336.3 95.3 352 81.5L352 277.5C485.6 160.6 560.3 95.3 576 81.5L576 558.5z" />
+                </svg>
+            </span>
+            <!-- Play/Pause btn -->
+            <span id="play-pause-btn" title="Reproducir">
+                <svg id="play" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" class="icon">
+                    <path fill="currentColor" d="M128 80L128 560L560 320L128 80z" />
+                </svg>
+                <svg id="pause" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" class="icon"
+                    style="display: none;">
+                    <path fill="currentColor"
+                        d="M288 96L128 96L128 544L288 544L288 96zM512 96L352 96L352 544L512 544L512 96z" />
+                </svg>
+            </span>
+            <!-- Forward btn -->
+            <span id="forward-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" class="icon">
+                    <path fill="currentColor"
+                        d="M64 558.5C79.7 544.7 154.4 479.4 288 362.5L288 558.5C303.7 544.7 378.4 479.4 512 362.5L512 544L576 544L576 96L512 96L512 277.5C378.4 160.6 303.7 95.3 288 81.5L288 277.5C154.4 160.6 79.7 95.3 64 81.5L64 558.5z" />
+                </svg>
+            </span>
+            <!-- Repeat btn -->
+            <span id="repeat-btn" title="Activar repetición">
+                <svg id="repeat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" class="icon">
+                    <path fill="currentColor"
+                        d="M416 272L416 192L128 192L128 352L64 352L64 128L416 128L416 48L440 48L552 160L440 272L416 272zM224 512L224 592L200 592L88 480L200 368L224 368L224 448L512 448L512 288L576 288L576 512L224 512z" />
+                </svg>
+                <svg id="repeat-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" class="icon"
+                    style="display: none;">
+                    <path fill="currentColor"
+                        d="M416 192L416 272L440 272L552 160L440 48L416 48L416 128L64 128L64 352L128 352L128 192L416 192zM224 592L224 512L576 512L576 288L512 288L512 448L224 448L224 368L200 368L88 480L200 592L224 592zM288 304L304 304L304 384L352 384L352 256L280 256L280 304L288 304z" />
+                </svg>
+            </span>
+            <!-- Open file btn -->
+            <span id="open-file-btn" title="Open File">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" class="icon">
+                    <path fill="currentColor"
+                        d="M96 384L96 320L320 80L544 320L544 384L96 384zM544 544L96 544L96 448L544 448L544 544z" />
+                </svg>
+                <input type="file" accept="audio/*" id="input-file" multiple>
+            </span>
+        </div>
+
+
+        <div id="play-list">
+            <p style="text-align: center;">Lista de canciones</p>
+            <table id="data-table"></table>
+        </div>
+
+    </main>
+
+    <script>
+
+        "use strict";
+
+        const defaultSongs = [
+            { name: "Eddie Santiago - Antidoto y veneno.m4a" },
+            { name: "La inmensidad - Ay que amor.mp3" },
+            { name: "La Misma Gente - Llego el final.m4a" },
+            { name: "Los Hermanos Moreno - Por alguien como tu.m4a" },
+            { name: "Nino Segarra - Como amigos si, como amantes no.mp3" },
+            { name: "Nino Segarra - Entre la espada y la pared.mp3" },
+            { name: "Nino Segarra - Porque te amo.m4a" }
+        ];
+
+        const d = document;
+        const inputFile = d.querySelector("#input-file");
+        const openFileBtn = d.querySelector("#open-file-btn");
+
+        const dataTable = d.querySelector("#data-table");
+        const playPauseBtn = d.querySelector("#play-pause-btn");
+        const [playIcon, pauseIcon] = [playPauseBtn.querySelector("#play"), playPauseBtn.querySelector("#pause")];
+
+        const songTitle = d.querySelector("#song-title");
+
+        const setSrc = song => {
+        }
+
+        const audio = new Audio();
+        audio.volume = .5;
+        let index = 0;
+        let totalSongs = defaultSongs.length;
+
+        d.addEventListener("DOMContentLoaded", () => {
+            init();
+        });
+
+        const init = () => {
+            // Seleccionamos la cancion en el indice cero y seteamos el source
+            audio.src = "audio/Salsa/" + defaultSongs[index].name;
+            audio.load();
+            songTitle.textContent = `🎵 ${defaultSongs[index].name} 🎵`;
+            // 2. Mostramos la lista de canciones
+            displaySongs(defaultSongs);
+        }
+
+        openFileBtn.addEventListener("click", () => {
+            if (inputFile) inputFile.click();
+        }, false);
+
+        inputFile.addEventListener("change", (event) => {
+            if (inputFile.files.length > 0) {
+                const songFiles = Array.from(inputFile.files);
+                songFiles.sort((a, b) => a.name > b.name ? 1 : a.name < b.name ? -1 : 0);
+                totalSongs = songFiles.length;
+                index = 0;
+
+                audio.src = URL.createObjectURL(songFiles[index]);
+                audio.load();
+                playAudio();
+                songTitle.textContent = `🎵 ${songFiles[index].name} 🎵`;
+
+                displaySongs(songFiles, true);
+            }
+        });
+
+        const displaySongs = (rows, local = false) => {
+            dataTable.textContent = "";
+            const fragment = d.createDocumentFragment();
+            rows.forEach((row, idx) => {
+                const tr = d.createElement('tr');
+                tr.dataset.id = idx;
+
+                const audioElt = d.createElement('audio');
+                audioElt.src = local ? URL.createObjectURL(row) : "audio/Salsa/" + row.name;
+                audioElt.addEventListener("loadedmetadata", () => {
+                    row.duration = audioElt.duration;
+                    tr.innerHTML = `
+                        <td>${idx + 1}.</td>
+                        <td>${removeExtension(row.name)}</td>
+                        <td>${formatTime(row.duration)}</td>`;
+                });
+                fragment.appendChild(tr);
+                // d.body.appendChild(audioElt);
+                tr.addEventListener("dblclick", () => {
+                    index = idx;
+                    audio.src = local ? URL.createObjectURL(row) : "audio/Salsa/" + row.name;
+                    audio.load();
+                    playAudio();
+                    songTitle.textContent = `🎵 ${row.name} 🎵`;
+                });
+            });
+            dataTable.appendChild(fragment);
+        }
+
+        playPauseBtn.addEventListener("click", () => {
+            if (audio.src === "") return;
+            if (audio.paused) {
+                playAudio();
+            } else {
+                pauseAudio();
+            }
+        });
+
+        audio.addEventListener('ended', () => {
+            if (index >= totalSongs - 1) {
+                playIcon.style.display = "inline";
+                pauseIcon.style.display = "none";
+                return;
+            }
+            index++;
+            audio.src = "audio/salsa/" + defaultSongs[index].name;
+            audio.load();
+            playAudio();
+            songTitle.textContent = `🎵 ${defaultSongs[index].name} 🎵`;
+        });
+
+        // Format time in hh:mm:ss or mm:ss
+        const formatTime = (seconds) => {
+            seconds = Math.round(seconds); // 287.370158
+            const hours = (seconds / 3600) | 0;  // Hours calculation
+            const minutes = ((seconds % 3600) / 60) | 0;  // Minutes calculation
+            const remainingSeconds = (seconds % 60);  // Whole seconds
+
+            return hours > 0
+                // Show hours:minutes:seconds format
+                ? `${hours}:${/*minutes < 10 ? '0' + minutes : */minutes}:${remainingSeconds < 10 ? '0' + remainingSeconds : remainingSeconds}`
+                // Show minutes:seconds format
+                : `${/*minutes < 10 ? '0' + minutes :*/ minutes}:${remainingSeconds < 10 ? '0' + remainingSeconds : remainingSeconds}`;
+        }
+
+        const playAudio = () => {
+            audio.play();
+            playIcon.style.display = "none";
+            pauseIcon.style.display = "inline";
+        }
+
+        const pauseAudio = () => {
+            audio.pause();
+            playIcon.style.display = "inline";
+            pauseIcon.style.display = "none";
+        }
+
+        const removeExtension = (filename) => {
+            return filename.slice(0, filename.lastIndexOf("."));
+        }
+
+    </script>
+</body>
+
+</html>

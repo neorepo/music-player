@@ -337,16 +337,13 @@
         });
 
         const init = () => {
-            // Cargamos el indice cero
-            const song = songsCopy[index];
-            // 1. Cargamos el audio
-            load(song);
+            // 1. Cargamos el indice cero
+            load(songsCopy[index]);
             // 2. Mostramos la lista de canciones
             displayRows(songsCopy);
             // Reseteamos los valores
             volumeSlider.value = 100;
             audioCurrentTimeSlider.value = 0;
-
             dataTable.parentElement.scrollTop = 0;
         }
 
@@ -401,10 +398,8 @@
                 shuffle(songsCopy);
                 index = -1;
             } else {
-                // Buscamos el id de la canción actual
-                const searchId = audio.dataset['songId'];
-                // Buscamos el índice en el array original
-                index = songs.findIndex(song => song.id == searchId);
+                // Buscamos el id de la canción actual y buscamos el índice en el array original
+                index = songs.findIndex(song => song.id == audio.dataset['songId']);
                 // Devolvemos el orden del array original
                 songsCopy = [...songs];
             }
@@ -435,8 +430,7 @@
                 return;
             }
             index++;
-            const song = songsCopy[index];
-            load(song);
+            load(songsCopy[index]);
             audio.play();
 
             removeCssClass("playing");
