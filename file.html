@@ -215,7 +215,7 @@
 
         const init = () => {
             // Seleccionamos la cancion en el indice cero y seteamos el source
-            audio.src = "audio/Salsa/" + defaultSongs[index].name;
+            audio.src = "audio/salsa/" + defaultSongs[index].name;
             audio.load();
             songTitle.textContent = `🎵 ${defaultSongs[index].name} 🎵`;
             // 2. Mostramos la lista de canciones
@@ -250,7 +250,7 @@
                 tr.dataset.id = idx;
 
                 const audioElt = d.createElement('audio');
-                audioElt.src = local ? URL.createObjectURL(row) : "audio/Salsa/" + row.name;
+                audioElt.src = local ? URL.createObjectURL(row) : "audio/salsa/" + row.name;
                 audioElt.addEventListener("loadedmetadata", () => {
                     row.duration = audioElt.duration;
                     tr.innerHTML = `
@@ -262,7 +262,7 @@
                 // d.body.appendChild(audioElt);
                 tr.addEventListener("dblclick", () => {
                     index = idx;
-                    audio.src = local ? URL.createObjectURL(row) : "audio/Salsa/" + row.name;
+                    audio.src = local ? URL.createObjectURL(row) : "audio/salsa/" + row.name;
                     audio.load();
                     playAudio();
                     songTitle.textContent = `🎵 ${row.name} 🎵`;
