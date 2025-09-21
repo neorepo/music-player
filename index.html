@@ -363,12 +363,11 @@
         forwardBtn.addEventListener("click", () => {
             if (index >= totalSongs - 1) return;
             index++;
-            const song = songsCopy[index];
             if (!audio.paused) {
-                load(song);
+                load(songsCopy[index]);
                 audio.play();
             } else {
-                load(song);
+                load(songsCopy[index]);
             }
 
             removeCssClass("playing");
@@ -378,12 +377,11 @@
         backwardBtn.addEventListener("click", () => {
             if (index < 1) return;
             index--;
-            const song = songsCopy[index];
             if (!audio.paused) {
-                load(song);
+                load(songsCopy[index]);
                 audio.play();
             } else {
-                load(song);
+                load(songsCopy[index]);
             }
             removeCssClass("playing");
             addCssClass("playing");
@@ -395,7 +393,13 @@
             // Cambiamos el color al elemento span, no al SVG
             shuffleBtn.style.color = isShuffle ? "#ff9800" : "currentColor";
             if (isShuffle) {
-                shuffle(songsCopy);
+                songsCopy = shuffle(songsCopy);
+                // Para que exista igualdad no comparar con ===
+                // porque audio.dataset['songId'], es un string y songsCopy[0].id, es un entero
+                if (songsCopy[0].id == audio.dataset['songId']) {
+                    songsCopy.reverse();
+                    // console.log("Se invirtio el orden de los elementos.");
+                }
                 index = -1;
             } else {
                 // Buscamos el id de la canción actual y buscamos el índice en el array original
@@ -441,36 +445,36 @@
             dataTable.textContent = "";
             const fragment = d.createDocumentFragment();
             rows.forEach((song, idx) => {
-                const row = d.createElement('tr');
-                row.dataset.id = song.id;
+                const tr = d.createElement('tr');
+                tr.dataset.id = song.id;
                 // Create table cells (td) for each song property
-                row.innerHTML = `
+                tr.innerHTML = `
                     <td>${idx + 1}.</td>
                     <td>${song.artist} - ${song.title}</td>
                     <td>${song.duration}</td>`;
 
                 if (idx === index && audio.src !== "") {
-                    row.classList.add("playing");
+                    tr.classList.add("playing");
                 }
 
-                row.addEventListener('click', () => {
+                tr.addEventListener('click', () => {
                     removeCssClass("selected");
-                    row.classList.add("selected");
+                    tr.classList.add("selected");
                 });
 
-                row.addEventListener("dblclick", () => {
+                tr.addEventListener("dblclick", () => {
                     index = idx;
                     load(song);
                     audio.play();
 
                     removeCssClass("playing");
-                    row.classList.add("playing");
+                    tr.classList.add("playing");
 
                     playIcon.style.display = "none";
                     pauseIcon.style.display = "inline";
                 });
 
-                fragment.appendChild(row);
+                fragment.appendChild(tr);
             });
             dataTable.appendChild(fragment);
         }
@@ -542,6 +546,7 @@
                 const r = i + parseInt(Math.random() * (len - i));
                 [arr[i], arr[r]] = [arr[r], arr[i]];
             }
+            return arr;
         }
 
         // Format time in hh:mm:ss or mm:ss
