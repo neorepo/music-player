@@ -369,7 +369,6 @@
             } else {
                 load(songsCopy[index]);
             }
-
             removeCssClass("playing");
             addCssClass("playing");
         });
@@ -385,7 +384,6 @@
             }
             removeCssClass("playing");
             addCssClass("playing");
-
         });
 
         shuffleBtn.addEventListener("click", () => {
@@ -393,14 +391,13 @@
             // Cambiamos el color al elemento span, no al SVG
             shuffleBtn.style.color = isShuffle ? "#ff9800" : "currentColor";
             if (isShuffle) {
-                songsCopy = shuffle(songsCopy);
-                // Para que exista igualdad no comparar con ===
-                // porque audio.dataset['songId'], es un string y songsCopy[0].id, es un entero
-                if (songsCopy[0].id == audio.dataset['songId']) {
-                    songsCopy.reverse();
-                    // console.log("Se invirtio el orden de los elementos.");
-                }
-                index = -1;
+                const currentlyPlayingSong = songsCopy.find(song => song.id == audio.dataset["songId"]);
+                songsCopy = shuffle(songsCopy.filter(song => song.id != audio.dataset["songId"]));
+                // songsCopy = [currentlyPlayingSong, ...shuffle(songsCopy.filter(song => song.id != audio.dataset["songId"]))];
+                // Enviamos al principio la canción que esta actualmente en reproducción
+                songsCopy.unshift(currentlyPlayingSong);
+                console.log(songsCopy);
+                index = 0;
             } else {
                 // Buscamos el id de la canción actual y buscamos el índice en el array original
                 index = songs.findIndex(song => song.id == audio.dataset['songId']);
