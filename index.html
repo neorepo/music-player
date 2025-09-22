@@ -460,7 +460,7 @@
                 });
 
                 tr.addEventListener("dblclick", () => {
-                    index = idx;
+                    if (!isShuffle) index = idx;
                     load(song);
                     audio.play();
 
@@ -491,7 +491,7 @@
             audio.currentTime = audioCurrentTimeSlider.value;
         });
 
-        volumeSlider.addEventListener("input", (event) => {
+        volumeSlider.addEventListener("input", () => {
             volumeDisplay.textContent = volumeSlider.value;
             audio.volume = volumeSlider.value / 100;
             if (volumeSlider.value === "0") {
