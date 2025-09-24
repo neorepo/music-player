@@ -190,8 +190,8 @@
         <div id="audio-current-time-container">
             <input type="range" id="audio-current-time-slider" min="0" max="100" value="0" step="1"
                 style="width: 100%;">
-            <span id="current-time" style="position: absolute;top: 70%;left: 0;">0:00</span>
-            <span id="duration" style="position: absolute;top: 70%;right: 0;">3:33</span>
+            <span id="current-time" style="position: absolute;top: 70%;left: 0;"></span>
+            <span id="duration" style="position: absolute;top: 70%;right: 0;"></span>
         </div>
 
         <div id="controls">
@@ -329,9 +329,9 @@
 
         const load = song => {
             audio.src = song.src;
+            audio.dataset.songId = song.id;
             audio.load();
             songTitle.textContent = `🎵 ${song.artist} - ${song.title} 🎵`;
-            audio.dataset.songId = song.id;
         }
 
         d.addEventListener("DOMContentLoaded", () => {
@@ -393,9 +393,9 @@
             // Cambiamos el color al elemento span, no al SVG
             shuffleBtn.style.color = isShuffle ? "#ff9800" : "currentColor";
             if (isShuffle) {
-                const currentlyPlayingSong = songsCopy.find(song => song.id == audio.dataset["songId"]);
-                songsCopy = shuffle(songsCopy.filter(song => song.id != audio.dataset["songId"]));
-                // songsCopy = [currentlyPlayingSong, ...shuffle(songsCopy.filter(song => song.id != audio.dataset["songId"]))];
+                // const currentlyPlayingSong = songsCopy.find(song => song.id == audio.dataset["songId"]);
+                const currentlyPlayingSong = songsCopy.splice(songs.findIndex(song => song.id == audio.dataset['songId']), 1)[0];
+                songsCopy = shuffle(songsCopy);
                 // Enviamos al principio la canción que esta actualmente en reproducción
                 songsCopy.unshift(currentlyPlayingSong);
                 console.log(songsCopy);
