@@ -479,7 +479,9 @@
         }
 
         audio.addEventListener("loadedmetadata", () => {
+            currentTime.textContent = formatTime(audio.currentTime);
             duration.textContent = formatTime(audio.duration);
+            audioCurrentTimeSlider.value = audio.currentTime;
             audioCurrentTimeSlider.max = audio.duration; // Ajustar el máximo de la barra de progreso
         });
 
