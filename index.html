@@ -191,7 +191,7 @@
             <input type="range" id="audio-current-time-slider" min="0" max="100" value="0" step="1"
                 style="width: 100%;">
             <span id="current-time" style="position: absolute;top: 70%;left: 0;">0:00</span>
-            <span id="duration" style="position: absolute;top: 70%;right: 0;">3:33</span>
+            <span id="duration" style="position: absolute;top: 70%;right: 0;">5:09</span>
         </div>
 
         <div id="controls">
@@ -363,8 +363,7 @@
         });
 
         forwardBtn.addEventListener("click", () => {
-            if (index >= totalSongs - 1) return;
-            index++;
+            index = (index + 1) % totalSongs;
             if (!audio.paused) {
                 load(songsCopy[index]);
                 audio.play();
@@ -376,8 +375,7 @@
         });
 
         backwardBtn.addEventListener("click", () => {
-            if (index < 1) return;
-            index--;
+            index = (index - 1 + totalSongs) % totalSongs;
             if (!audio.paused) {
                 load(songsCopy[index]);
                 audio.play();
